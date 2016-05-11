@@ -32,28 +32,36 @@ cd build
 GIT_VERSION=`git rev-list --branches HEAD | wc -l`
 VERSION="1.$GIT_VERSION"
 
+echo "VERSION = " $VERSION
+
 PATH=/usr/local/probe/bin:$PATH
 /usr/local/probe/bin/cmake -DUSE_LR_DEBUG=ON -DVERSION=$VERSION -DCMAKE_CXX_COMPILER_ARG1:STRING=' -Wall -Werror -g -gdwarf-2 -fprofile-arcs -ftest-coverage -O0 -fPIC -m64 -Wl,-rpath -Wl,. -Wl,-rpath -Wl,/usr/local/probe/lib -Wl,-rpath -Wl,/usr/local/probe/lib64 ' -DCMAKE_CXX_COMPILER=/usr/local/probe/bin/g++ ..
 
 
 make -j
 
-# Run all unit tests excepts the ones that are tagged with Root at the end
-# the reason for this is that the code coverage will fail otherwise due to 
-# some root specific actions that will take place within these tests
-# It is likely a gcovr bug and the test split is a work around
-./UnitTestRunner --gtest_filter=-*Root
+sudo ./UnitTestRunner --gtest_filter=*ThreadSafe*Root*
 
-#run the root tests once as non-root. They will fail but will generate the .gcda files
-./UnitTestRunner --gtest_filter=*Root 
 
-# the bug in the code coverage for root has to do with the under the cover
-# root manipulation some FileIO code does. Now when the .gcda
-# files already exist we can execute the test again as root
-sudo ./UnitTestRunner --gtest_filter=*Root
-sudo chown -R $USER .
-cd ..
 
+# # Run all unit tests excepts the ones that are tagged with Root at the end
+# # the reason for this is that the code coverage will fail otherwise due to 
+# # some root specific actions that will take place within these tests
+# # It is likely a gcovr bug and the test split is a work around
+# ./UnitTestRunner --gtest_filter=-*Root
+
+# #run the root tests once as non-root. They will fail but will generate the .gcda files
+# ./UnitTestRunner --gtest_filter=*Root 
+
+# # the bug in the code coverage for root has to do with the under the cover
+# # root manipulation some FileIO code does. Now when the .gcda
+# # files already exist we can execute the test again as root
+# sudo ./UnitTestRunner --gtest_filter=*Root
+# ./UnitTestRunner --gtest_filter=-*Root 
+# sudo chown -R $USER .
+# cd ..
+
+# cp $LAUNCH_DIR/build/CMakeFiles/UnitTestRunner.dir/test/*.gcda $LAUNCH_DIR/build/CMakeFiles/FileIO.dir/src/
 
 
 PROJECT="FileIO"

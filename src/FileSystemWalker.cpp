@@ -7,7 +7,6 @@
  */
 
 #include "FileSystemWalker.h"
-#include "FileIO.h"
 #include <sys/types.h>
 #include <cerrno>
 #include <cstring> 

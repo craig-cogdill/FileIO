@@ -10,7 +10,7 @@
 #include <string>
 #include <functional>
 #include <fts.h>
-#include "Result.h"
+#include "FileIO.h"
 
 /*
  * FileSystemWalker is used in a similar way to the c-libraries "ftw, nftw, nftw64" but is thread-safe. 

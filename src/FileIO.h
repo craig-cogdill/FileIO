@@ -17,7 +17,6 @@
 #include <fcntl.h>
 #include <pwd.h>
 #include "DirectoryReader.h"
-#include "Result.h"
 
 namespace FileIO {
 void SetInterruptFlag(volatile int* interrupted = nullptr);
